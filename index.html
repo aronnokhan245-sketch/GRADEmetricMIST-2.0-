@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Predictor | Premium</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-card">
+    <div class="header">
+        <h1>Final Marks Needed</h1>
+    </div>
+
+    <div class="credit-toggle">
+        <button id="btn2" onclick="setCredit(2)">2.0 Credits</button>
+        <button id="btn3" class="active" onclick="setCredit(3)">3.0 Credits</button>
+    </div>
+
+    <div class="input-group">
+        <label>CT MARKS (Space separated)</label>
+        <input type="text" id="ctMarks" placeholder="e.g. 20 18 15">
+    </div>
+
+    <div class="grid-inputs">
+        <div class="input-group">
+            <label id="midLabel">MID TERM (Max 30)</label>
+            <input type="number" id="midterm" placeholder="Score">
+        </div>
+        <div class="input-group">
+            <label id="attLabel">ATTENDANCE (Max 15)</label>
+            <input type="number" id="attendance" placeholder="Score">
+        </div>
+        <div class="input-group">
+            <label id="perfLabel">CLASS PERF. (Max 15)</label>
+            <input type="number" id="performance" placeholder="Score">
+        </div>
+        <div class="input-group">
+            <label>TARGET %</label>
+            <input type="number" id="targetPerc" placeholder="80">
+        </div>
+    </div>
+
+    <div class="button-row">
+        <button class="calc-btn" onclick="calculate()">Calculate Requirement</button>
+        <button class="reset-btn" onclick="resetForm()">Reset All</button>
+    </div>
+
+    <div class="progress-container" id="progBar" style="display:none;">
+        <div class="progress-fill" id="fill"></div>
+    </div>
+
+    <div id="displayResult"></div>
+
+    <div class="footer-credit">
+        Made by Abir Anwar Khan (AE-17)
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
