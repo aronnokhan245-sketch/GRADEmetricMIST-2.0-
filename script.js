@@ -1,18 +1,17 @@
 let selectedCredit = 3;
-const inputs = ['ctMarks', 'midterm', 'attendance', 'performance', 'targetPerc'];
+const inputIDs = ['ctMarks', 'midterm', 'attendance', 'performance', 'targetPerc'];
 
-// 1. Persist data: Save to localStorage on input
-inputs.forEach(id => {
+// 1. Persistence Logic
+inputIDs.forEach(id => {
     document.getElementById(id).addEventListener('input', () => {
         localStorage.setItem(id, document.getElementById(id).value);
     });
 });
 
-// 2. Load data: Restore from localStorage on page load
 window.onload = () => {
-    inputs.forEach(id => {
-        const savedValue = localStorage.getItem(id);
-        if (savedValue) document.getElementById(id).value = savedValue;
+    inputIDs.forEach(id => {
+        const saved = localStorage.getItem(id);
+        if (saved) document.getElementById(id).value = saved;
     });
 };
 
@@ -20,38 +19,21 @@ function setCredit(val) {
     selectedCredit = val;
     document.getElementById('btn2').classList.toggle('active', val === 2);
     document.getElementById('btn3').classList.toggle('active', val === 3);
-
-    const midLabel = document.getElementById('midLabel');
-    const attLabel = document.getElementById('attLabel');
-    const perfLabel = document.getElementById('perfLabel');
-
-    if (val === 2) {
-        midLabel.innerText = "MID TERM (Max 20)";
-        attLabel.innerText = "ATTENDANCE (Max 10)";
-        perfLabel.innerText = "CLASS PERF. (Max 10)";
-    } else {
-        midLabel.innerText = "MID TERM (Max 30)";
-        attLabel.innerText = "ATTENDANCE (Max 15)";
-        perfLabel.innerText = "CLASS PERF. (Max 15)";
-    }
+    
+    document.getElementById('midLabel').innerText = val === 2 ? "MID TERM (Max 20)" : "MID TERM (Max 30)";
+    document.getElementById('attLabel').innerText = val === 2 ? "ATTENDANCE (Max 10)" : "ATTENDANCE (Max 15)";
+    document.getElementById('perfLabel').innerText = val === 2 ? "CLASS PERF. (Max 10)" : "CLASS PERF. (Max 15)";
 }
 
 function calculate() {
     const resDiv = document.getElementById('displayResult');
     const ctString = document.getElementById('ctMarks').value;
-    const ctArray = ctString.split(' ').filter(s => s !== '').map(Number);
+    const ctArray = ctString.split(' ').filter(n => n !== '').map(Number);
     
-    // Logic for CT Validation
-    if (ctArray.length < 2) {
-        alert("Please enter at least 2 CT marks");
-        return;
-    }
-
-    // Check if any CT exceeds 20
-    const hasInvalidCT = ctArray.some(mark => mark > 20);
-    if (hasInvalidCT) {
-        resDiv.innerHTML = "❌ Error: CT marks cannot exceed 20!";
-        resDiv.style.color = "#ff4d4d";
+    // Professional CT Validation
+    if (ctArray.length < 2) { alert("Please enter at least 2 CT marks"); return; }
+    if (ctArray.some(m => m > 20)) {
+        resDiv.innerHTML = "<span style='color:#ff4d4d'>❌ CT limit (20) exceeded</span>";
         return;
     }
 
@@ -60,51 +42,44 @@ function calculate() {
     const perf = parseFloat(document.getElementById('performance').value) || 0;
     const target = parseFloat(document.getElementById('targetPerc').value) || 80;
 
-    let maxMid = (selectedCredit === 2) ? 20 : 30;
-    let maxAttPerf = (selectedCredit === 2) ? 10 : 15;
+    // Weight Logic
+    const maxMid = selectedCredit === 2 ? 20 : 30;
+    const maxAP = selectedCredit === 2 ? 10 : 15;
 
-    // Logic for Invalid Input (Max limits)
-    if (mid > maxMid || att > maxAttPerf || perf > maxAttPerf) {
-        resDiv.innerHTML = "❌ Error: Marks exceed maximum limit!";
-        resDiv.style.color = "#ff4d4d";
+    if (mid > maxMid || att > maxAP || perf > maxAP) {
+        resDiv.innerHTML = "<span style='color:#ff4d4d'>❌ Invalid Score Limits</span>";
         return;
     }
-    
-    resDiv.style.color = "#D4AF37"; 
 
-    // Sort and get Best Two
     ctArray.sort((a, b) => b - a);
     const bestTwoAvg = (ctArray[0] + ctArray[1]) / 2.0;
+    const midP = (mid / maxMid) * 10;
+    const attP = (att / maxAP) * 5;
+    const perfP = (perf / maxAP) * 5;
 
-    // Weight Calculations
-    let midP = (selectedCredit === 2) ? (mid / 20) * 10 : (mid / 30) * 10;
-    let attP = (selectedCredit === 2) ? (att / 10) * 5 : (att / 15) * 5;
-    let perfP = (selectedCredit === 2) ? (perf / 10) * 5 : (perf / 15) * 5;
+    const currentTotal = bestTwoAvg + midP + attP + perfP;
+    const neededPerc = target - currentTotal;
+    const maxFinal = selectedCredit === 2 ? 120 : 180;
+    const finalScore = (neededPerc / 60) * maxFinal;
 
-    let currentTotal = bestTwoAvg + midP + attP + perfP;
-    let needed = target - currentTotal;
-    let maxFinal = (selectedCredit === 2) ? 120 : 180;
-    let finalMark = (needed / 60) * maxFinal;
+    // Progress Bar Update
+    document.getElementById('progSection').style.display = 'block';
+    const progress = Math.min(100, (currentTotal / 0.4)).toFixed(0);
+    document.getElementById('fill').style.width = progress + "%";
+    document.getElementById('progValue').innerText = progress + "% secured";
 
-    // Update Progress Bar (currentTotal is out of 40%)
-    const progBar = document.getElementById('progBar');
-    const fill = document.getElementById('fill');
-    progBar.style.display = 'block';
-    fill.style.width = (currentTotal / 0.4) + "%";
-
-    if (finalMark > maxFinal) {
-        resDiv.innerHTML = "Status: Impossible to reach target!";
+    if (finalScore > maxFinal) {
+        resDiv.innerHTML = "<span style='color:#ff4d4d'>Target Impossible</span>";
     } else {
-        const result = Math.max(0, finalMark).toFixed(2);
-        resDiv.innerHTML = `Need: ${result} / ${maxFinal}`;
+        resDiv.innerHTML = `Need <b style='color:#D4AF37'>${Math.max(0, finalScore).toFixed(2)}</b> / ${maxFinal}`;
     }
 }
 
 function resetForm() {
-    inputs.forEach(id => {
+    inputIDs.forEach(id => {
         document.getElementById(id).value = '';
         localStorage.removeItem(id);
     });
     document.getElementById('displayResult').innerHTML = '';
-    document.getElementById('progBar').style.display = 'none';
+    document.getElementById('progSection').style.display = 'none';
 }
