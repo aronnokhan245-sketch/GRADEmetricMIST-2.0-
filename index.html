@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grade Predictor | Premium</title>
+    <title>GradeMetric Premium | AE-17</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<div class="bg-animation"></div>
+
 <div class="app-card">
     <div class="header">
-        <h1>Final Marks Needed</h1>
+        <h1>GradeMetric</h1>
+        <p class="subtitle">Requirement Estimator</p>
     </div>
 
     <div class="credit-toggle">
@@ -18,43 +21,49 @@
         <button id="btn3" class="active" onclick="setCredit(3)">3.0 Credits</button>
     </div>
 
-    <div class="input-group">
+    <div class="input-container">
         <label>CT MARKS (Space separated)</label>
         <input type="text" id="ctMarks" placeholder="e.g. 20 18 15">
     </div>
 
     <div class="grid-inputs">
-        <div class="input-group">
+        <div class="input-container">
             <label id="midLabel">MID TERM (Max 30)</label>
             <input type="number" id="midterm" placeholder="Score">
         </div>
-        <div class="input-group">
+        <div class="input-container">
             <label id="attLabel">ATTENDANCE (Max 15)</label>
             <input type="number" id="attendance" placeholder="Score">
         </div>
-        <div class="input-group">
+        <div class="input-container">
             <label id="perfLabel">CLASS PERF. (Max 15)</label>
             <input type="number" id="performance" placeholder="Score">
         </div>
-        <div class="input-group">
+        <div class="input-container">
             <label>TARGET %</label>
             <input type="number" id="targetPerc" placeholder="80">
         </div>
     </div>
 
-    <div class="button-row">
+    <div class="action-area">
         <button class="calc-btn" onclick="calculate()">Calculate Requirement</button>
-        <button class="reset-btn" onclick="resetForm()">Reset All</button>
+        <button class="reset-btn" onclick="resetForm()">Reset All Data</button>
     </div>
 
-    <div class="progress-container" id="progBar" style="display:none;">
-        <div class="progress-fill" id="fill"></div>
+    <div class="progress-section" id="progSection" style="display:none;">
+        <div class="progress-header">
+            <span>Course Progress</span>
+            <span id="progValue">0%</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" id="fill"></div>
+        </div>
     </div>
 
     <div id="displayResult"></div>
 
     <div class="footer-credit">
-        Made by Abir Anwar Khan (AE-17)
+        Project by Abir Anwar Khan <br> <span>Batch AE-17, MIST</span>
     </div>
 </div>
 
