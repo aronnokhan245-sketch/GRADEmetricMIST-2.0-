@@ -3,18 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GradeMetric Premium | AE-17</title>
+    <title>Grade Estimator (MIST)</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="bg-animation"></div>
-<div class="logo-bg"></div>
-
 <div class="app-card">
     <div class="header">
-        <h1>GradeMetric</h1>
-        <p class="subtitle">Requirement Estimator</p>
+        <h1>MIST MARK ESTIMATOR</h1>
     </div>
 
     <div class="credit-toggle">
@@ -22,49 +18,53 @@
         <button id="btn3" class="active" onclick="setCredit(3)">3.0 Credits</button>
     </div>
 
-    <div class="input-container">
+    <div class="input-group">
         <label>CT MARKS (Space separated)</label>
-        <input type="text" id="ctMarks" placeholder="e.g. 20 18 15">
+        <input type="text" id="ctMarks" placeholder="e.g. 18 15 19">
     </div>
 
     <div class="grid-inputs">
-        <div class="input-container">
+        <div class="input-group">
             <label id="midLabel">MID TERM (Max 30)</label>
             <input type="number" id="midterm" placeholder="Score">
         </div>
-        <div class="input-container">
+        <div class="input-group">
             <label id="attLabel">ATTENDANCE (Max 15)</label>
             <input type="number" id="attendance" placeholder="Score">
         </div>
-        <div class="input-container">
+        <div class="input-group">
             <label id="perfLabel">CLASS PERF. (Max 15)</label>
             <input type="number" id="performance" placeholder="Score">
         </div>
-        <div class="input-container">
-            <label>TARGET %</label>
-            <input type="number" id="targetPerc" placeholder="80">
+        <div class="input-group">
+            <label>TARGET GPA</label>
+            <select id="targetGPA" class="gpa-select">
+                <option value="80">4.00 (A+)</option>
+                <option value="75">3.75 (A)</option>
+                <option value="70">3.50 (A-)</option>
+                <option value="65">3.25 (B+)</option>
+                <option value="60">3.00 (B)</option>
+                <option value="55">2.75 (B-)</option>
+                <option value="50">2.50 (C+)</option>
+                <option value="45">2.25 (C)</option>
+                <option value="40">2.00 (D)</option>
+            </select>
         </div>
     </div>
 
-    <div class="action-area">
+    <div class="button-row">
         <button class="calc-btn" onclick="calculate()">Calculate Requirement</button>
-        <button class="reset-btn" onclick="resetForm()">Reset All Data</button>
+        <button class="reset-btn" onclick="resetForm()">Reset All</button>
     </div>
 
-    <div class="progress-section" id="progSection" style="display:none;">
-        <div class="progress-header">
-            <span>Course Progress</span>
-            <span id="progValue">0%</span>
-        </div>
-        <div class="progress-track">
-            <div class="progress-fill" id="fill"></div>
-        </div>
+    <div class="progress-container" id="progBar" style="display:none;">
+        <div class="progress-fill" id="fill"></div>
     </div>
 
     <div id="displayResult"></div>
 
     <div class="footer-credit">
-        Project by Abir Anwar Khan <br> <span>Batch AE-17, MIST</span>
+        Made by Abir Anwar Khan (AE-17)
     </div>
 </div>
 
