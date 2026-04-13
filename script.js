@@ -1,10 +1,11 @@
 let selectedCredit = 3;
 const inputs = ['ct1', 'ct2', 'ct3', 'midterm', 'attendance', 'performance', 'targetGPA'];
 
-// Persistence
+// Persistence Logic
 inputs.forEach(id => {
-    document.getElementById(id).addEventListener('input', () => {
-        localStorage.setItem(id, document.getElementById(id).value);
+    const element = document.getElementById(id);
+    element.addEventListener('input', () => {
+        localStorage.setItem(id, element.value);
     });
 });
 
@@ -28,7 +29,7 @@ function setCredit(val) {
 function calculate() {
     const resDiv = document.getElementById('displayResult');
     
-    // Collect CTs
+    // Get marks from the 3 CT boxes
     const ct1 = parseFloat(document.getElementById('ct1').value) || 0;
     const ct2 = parseFloat(document.getElementById('ct2').value) || 0;
     const ct3 = parseFloat(document.getElementById('ct3').value) || 0;
@@ -37,40 +38,44 @@ function calculate() {
     // Validation
     if (ctArray.some(m => m > 20)) {
         resDiv.innerHTML = "❌ CT marks cannot exceed 20";
+        resDiv.style.color = "#ff4d4d";
         return;
     }
 
     const mid = parseFloat(document.getElementById('midterm').value) || 0;
     const att = parseFloat(document.getElementById('attendance').value) || 0;
     const perf = parseFloat(document.getElementById('performance').value) || 0;
-    const targetPerc = parseFloat(document.getElementById('targetGPA').value);
+    const targetPercentage = parseFloat(document.getElementById('targetGPA').value);
 
-    // MIST Calculation Logic
+    // MIST Calculation: Best 2 Average (Weight 20%)
     ctArray.sort((a, b) => b - a);
     const bestTwoAvg = (ctArray[0] + ctArray[1]) / 2.0;
 
+    // Weightage for non-final components (40% total)
     let midWeight = (selectedCredit === 2) ? (mid / 20) * 10 : (mid / 30) * 10;
     let attWeight = (selectedCredit === 2) ? (att / 10) * 5 : (att / 15) * 5;
     let perfWeight = (selectedCredit === 2) ? (perf / 10) * 5 : (perf / 15) * 5;
 
     let currentTotal = bestTwoAvg + midWeight + attWeight + perfWeight;
-    let neededPerc = targetPerc - currentTotal;
+    let neededFromFinal = targetPercentage - currentTotal;
     
-    let maxFinal = (selectedCredit === 2) ? 120 : 180;
-    let finalMark = (neededPerc / 60) * maxFinal;
+    // Final exam is 60% of total grade
+    let maxFinalMark = (selectedCredit === 2) ? 120 : 180;
+    let finalMarkRequired = (neededFromFinal / 60) * maxFinalMark;
 
-    if (finalMark > maxFinal) {
+    if (finalMarkRequired > maxFinalMark) {
         resDiv.innerHTML = "STATUS: Target GPA Unreachable";
         resDiv.style.color = "#ff4d4d";
     } else {
-        resDiv.innerHTML = `NEED: ${Math.max(0, finalMark).toFixed(2)} / ${maxFinal} in Finals`;
+        const finalResult = Math.max(0, finalMarkRequired).toFixed(2);
+        resDiv.innerHTML = `NEED: ${finalResult} / ${maxFinalMark} in Finals`;
         resDiv.style.color = "#d4af37";
     }
 }
 
 function resetForm() {
     inputs.forEach(id => {
-        document.getElementById(id).value = '';
+        document.getElementById(id).value = (id === 'targetGPA') ? '80' : '';
         localStorage.removeItem(id);
     });
     document.getElementById('displayResult').innerHTML = '';
