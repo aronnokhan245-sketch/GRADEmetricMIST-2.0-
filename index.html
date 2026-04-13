@@ -10,48 +10,35 @@
 
 <div class="app-card">
     <div class="header">
-        <h1>MIST MARK ESTIMATOR <span class="gear-icon">⚙️</span></h1>
+        <h1>MIST MARK ESTIMATOR</h1>
     </div>
 
     <div class="credit-toggle">
-        <div class="toggle-container">
-            <button id="btn2" onclick="setCredit(2)">2.0 Credits</button>
-            <button id="btn3" class="active" onclick="setCredit(3)">3.0 Credits</button>
-        </div>
+        <button id="btn2" onclick="setCredit(2)">2.0 Credits</button>
+        <button id="btn3" class="active" onclick="setCredit(3)">3.0 Credits</button>
     </div>
 
-    <div class="input-section">
-        <label class="section-label">CT MARKS</label>
-        <div class="ct-grid">
-            <div class="ct-box">
-                <input type="number" id="ct1" placeholder="score">
-                <span>CT 1</span>
-            </div>
-            <div class="ct-box">
-                <input type="number" id="ct2" placeholder="score">
-                <span>CT 2</span>
-            </div>
-            <div class="ct-box">
-                <input type="number" id="ct3" placeholder="score">
-                <span>CT 3</span>
-            </div>
+    <div class="section-label">CT MARKS (Max 20 Each)</div>
+    <div class="ct-grid">
+        <div class="input-group">
+            <input type="number" id="ct1" placeholder="CT 1">
+        </div>
+        <div class="input-group">
+            <input type="number" id="ct2" placeholder="CT 2">
+        </div>
+        <div class="input-group">
+            <input type="number" id="ct3" placeholder="CT 3">
         </div>
     </div>
 
     <div class="grid-inputs">
-        <div class="input-group gold-border">
+        <div class="input-group">
             <label id="midLabel">MID TERM (Max 30)</label>
-            <div class="input-wrapper">
-                <input type="number" id="midterm" placeholder="Score">
-                <span class="icon">📄</span>
-            </div>
+            <input type="number" id="midterm" placeholder="Score">
         </div>
         <div class="input-group">
             <label id="attLabel">ATTENDANCE (Max 15)</label>
-            <div class="input-wrapper">
-                <input type="number" id="attendance" placeholder="Score">
-                <span class="icon">📋</span>
-            </div>
+            <input type="number" id="attendance" placeholder="Score">
         </div>
         <div class="input-group">
             <label id="perfLabel">CLASS PERF. (Max 15)</label>
