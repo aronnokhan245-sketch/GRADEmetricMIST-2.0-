@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MIST Mark Estimator</title>
+    <title>Grade Estimator (MIST)</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -18,15 +18,11 @@
         <button id="btn3" class="active" onclick="setCredit(3)">3.0 Credits</button>
     </div>
 
-    <div class="section-label">CT MARKS (Max 20 Each)</div>
-    <div class="ct-grid">
-        <div class="input-group">
+    <div class="input-group">
+        <label>CT MARKS (Best 2 will be taken)</label>
+        <div class="ct-grid">
             <input type="number" id="ct1" placeholder="CT 1">
-        </div>
-        <div class="input-group">
             <input type="number" id="ct2" placeholder="CT 2">
-        </div>
-        <div class="input-group">
             <input type="number" id="ct3" placeholder="CT 3">
         </div>
     </div>
@@ -60,13 +56,19 @@
         </div>
     </div>
 
-    <button class="calc-btn" onclick="calculate()">CALCULATE REQUIREMENT</button>
-    <button class="reset-btn" onclick="resetForm()">Reset All</button>
+    <div class="button-row">
+        <button class="calc-btn" onclick="calculate()">Calculate Requirement</button>
+        <button class="reset-btn" onclick="resetForm()">Reset All</button>
+    </div>
+
+    <div class="progress-container" id="progBar" style="display:none;">
+        <div class="progress-fill" id="fill"></div>
+    </div>
 
     <div id="displayResult"></div>
 
     <div class="footer-credit">
-        MADE BY ABIR ANWAR KHAN (AE-17)
+        Made by Abir Anwar Khan (AE-17)
     </div>
 </div>
 
