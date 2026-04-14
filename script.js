@@ -1,8 +1,6 @@
 let selectedCredit = 3;
-// Updated input IDs list
 const inputs = ['ct1', 'ct2', 'ct3', 'midterm', 'attendance', 'performance', 'targetGPA'];
 
-// Save/Load Logic
 inputs.forEach(id => {
     const element = document.getElementById(id);
     if (element) {
@@ -42,13 +40,12 @@ function setCredit(val) {
 
 function calculate() {
     const resDiv = document.getElementById('displayResult');
+    const resBox = document.getElementById('resultBox');
     
-    // Get values from the 3 CT boxes
     const c1 = parseFloat(document.getElementById('ct1').value);
     const c2 = parseFloat(document.getElementById('ct2').value);
     const c3 = parseFloat(document.getElementById('ct3').value);
     
-    // Create an array and filter out any non-numbers (empty fields)
     let ctArray = [c1, c2, c3].filter(num => !isNaN(num));
     
     if (ctArray.length < 2) {
@@ -57,7 +54,8 @@ function calculate() {
     }
 
     if (ctArray.some(mark => mark > 20)) {
-        resDiv.innerHTML = "❌ Error: CT marks cannot exceed 20!";
+        resBox.style.display = "block";
+        resDiv.innerHTML = "❌ CT marks cannot exceed 20!";
         resDiv.style.color = "#ff4d4d";
         return;
     }
@@ -71,18 +69,18 @@ function calculate() {
     let maxAttPerf = (selectedCredit === 2) ? 10 : 15;
 
     if (mid > maxMid || att > maxAttPerf || perf > maxAttPerf) {
-        resDiv.innerHTML = "❌ Error: Marks exceed maximum limit!";
+        resBox.style.display = "block";
+        resDiv.innerHTML = "❌ Marks exceed maximum limit!";
         resDiv.style.color = "#ff4d4d";
         return;
     }
     
     resDiv.style.color = "#D4AF37"; 
+    resBox.style.display = "block";
 
-    // Sort to find best two
     ctArray.sort((a, b) => b - a);
     const bestTwoAvg = (ctArray[0] + ctArray[1]) / 2.0;
 
-    // Weight Calculations
     let midP = (selectedCredit === 2) ? (mid / 20) * 10 : (mid / 30) * 10;
     let attP = (selectedCredit === 2) ? (att / 10) * 5 : (att / 15) * 5;
     let perfP = (selectedCredit === 2) ? (perf / 10) * 5 : (perf / 15) * 5;
@@ -98,21 +96,19 @@ function calculate() {
     fill.style.width = (currentTotal / 40 * 100) + "%";
 
     if (finalMark > maxFinal) {
-        resDiv.innerHTML = "Status: Target GPA unreachable!";
+        resDiv.innerHTML = "STATUS: Target GPA Unreachable!";
     } else {
         const result = Math.max(0, finalMark).toFixed(2);
-        resDiv.innerHTML = `Need: ${result} / ${maxFinal} in Finals`;
+        resDiv.innerHTML = `NEED: ${result} / ${maxFinal}`;
     }
 }
 
 function resetForm() {
     inputs.forEach(id => {
         const element = document.getElementById(id);
-        if(element) {
-            element.value = (id === 'targetGPA') ? '80' : '';
-        }
+        if(element) element.value = (id === 'targetGPA') ? '80' : '';
         localStorage.removeItem(id);
     });
-    document.getElementById('displayResult').innerHTML = '';
+    document.getElementById('resultBox').style.display = 'none';
     document.getElementById('progBar').style.display = 'none';
 }
