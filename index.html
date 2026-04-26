@@ -48,7 +48,6 @@
             background: conic-gradient(transparent, transparent, transparent, var(--gold));
             left: -25%;
             top: -25%;
-            /* Adjusted speed to 7s for a slightly slower movement */
             animation: rotateLight 7s linear infinite;
             z-index: -2;
         }
@@ -129,6 +128,15 @@
             width: 100%; border: 1px solid #333; background: var(--bg-dark); padding: 12px;
             border-radius: 12px; color: #fff; margin-bottom: 15px; box-sizing: border-box; 
             font-size: 14px; font-family: 'Open Sans', sans-serif;
+            transition: all 0.3s ease; /* Smooth transition for glow */
+            outline: none;
+        }
+
+        /* INPUT FOCUS LIGHT EFFECT */
+        input:focus, select:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            background: rgba(212, 175, 55, 0.05);
         }
 
         .ct-grid, .grid-inputs { display: grid; gap: 10px; }
