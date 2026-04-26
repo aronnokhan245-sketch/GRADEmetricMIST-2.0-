@@ -121,14 +121,12 @@
             box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
         }
 
-        /* Inputs */
-        .input-group label { display: block; font-size: 11px; color: var(--gold); font-weight: 700; margin-bottom: 6px; text-transform: uppercase; }
-        
+        /* Inputs and Dropdown */
         input, select {
             width: 100%; border: 1px solid #333; background: var(--bg-dark); padding: 12px;
             border-radius: 12px; color: #fff; margin-bottom: 15px; box-sizing: border-box; 
             font-size: 14px; font-family: 'Open Sans', sans-serif;
-            transition: all 0.3s ease; /* Smooth transition for glow */
+            transition: all 0.3s ease;
             outline: none;
         }
 
@@ -136,9 +134,17 @@
         input:focus, select:focus {
             border-color: var(--gold);
             box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-            background: rgba(212, 175, 55, 0.05);
+            background: #0d0d0d !important; /* Force dark background */
         }
 
+        /* FIXING DROPDOWN OPTIONS */
+        select option {
+            background-color: #0d0d0d;
+            color: #fff;
+        }
+
+        .input-group label { display: block; font-size: 11px; color: var(--gold); font-weight: 700; margin-bottom: 6px; text-transform: uppercase; }
+        
         .ct-grid, .grid-inputs { display: grid; gap: 10px; }
         .ct-grid { grid-template-columns: 1fr 1fr 1fr; }
         .grid-inputs { grid-template-columns: 1fr 1fr; }
