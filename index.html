@@ -55,12 +55,18 @@
             overflow: hidden;
         }
 
-        /* Decorative Gold Line */
+        /* 2. Top Shine Animation */
+        @keyframes shineMove {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
         .app-card::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 2px;
+            top: 0; left: -100%; width: 100%; height: 2px;
             background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            animation: shineMove 3s linear infinite;
         }
 
         h1 { 
@@ -116,7 +122,13 @@
             box-shadow: 0 4px 15px var(--gold-glow);
         }
 
-        /* Form Styling */
+        /* 1. Flashing Input Animation */
+        @keyframes inputFlash {
+            0% { border-color: rgba(255,255,255,0.1); box-shadow: 0 0 0px transparent; }
+            50% { border-color: var(--gold); box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); }
+            100% { border-color: rgba(255,255,255,0.1); box-shadow: 0 0 0px transparent; }
+        }
+
         .input-group label { 
             display: block; 
             font-size: 9px; 
@@ -138,6 +150,7 @@
             box-sizing: border-box; 
             font-size: 14px;
             transition: var(--transition);
+            animation: inputFlash 3s infinite ease-in-out;
         }
 
         input:focus {
@@ -145,6 +158,7 @@
             border-color: var(--gold);
             background: rgba(212, 175, 55, 0.05);
             box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
+            animation: none; /* Stop flashing when typing */
         }
 
         .ct-grid, .grid-inputs { display: grid; gap: 12px; }
@@ -180,28 +194,24 @@
 
         .reset-btn:hover { color: var(--gold); }
 
-        /* Result Animation */
-        @keyframes pulseResult {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
-
+        /* 3. Output Box Styling */
         .result-box {
             margin-top: 25px; 
             padding: 20px; 
-            background: rgba(212, 175, 55, 0.05);
+            background: rgba(0, 0, 0, 0.6);
             border: 1px solid var(--gold); 
-            border-radius: 20px; 
+            border-radius: 15px; 
             text-align: center;
-            animation: slideUpFade 0.5s ease-out, pulseResult 2s infinite ease-in-out;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+            animation: slideUpFade 0.5s ease-out;
         }
 
         #displayResult { 
-            color: var(--gold); 
+            color: #fff; /* White text for contrast inside the dark box */
             font-weight: 700; 
-            font-size: 16px; 
+            font-size: 15px; 
             letter-spacing: 1px;
+            text-shadow: 0 0 5px var(--gold-glow);
         }
 
         .footer-credit { 
