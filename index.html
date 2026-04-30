@@ -7,29 +7,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --olive-dark: #556B2F; /* Deep Olive */
+            --gold: #D4AF37;
             --rolling-speed: 0.8s cubic-bezier(0.65, 0, 0.35, 1);
 
-            /* DARK THEME (Default) */
+            /* DARK THEME: Original Black & Gold */
             --body-bg: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
             --card-bg: #0a0a0a;
             --card-inner-bg: #0d0d0d;
             --text-color: #ffffff;
+            --accent: var(--gold);
             --track-bg: #111111;
             --input-bg: #0a0a0a;
             --btn-text-inactive: #777777;
-            --btn-text-active: #ffffff;
+            --btn-text-active: #000000;
             --theme-btn-bg: #ffffff; 
             --theme-btn-text: #000000;
             --border-color: #333333;
         }
 
-        /* LIGHT THEME */
+        /* LIGHT THEME: Cream & Dark Olive */
         .light-mode {
-            --body-bg: #F5F5DC; /* Cream Background */
+            --body-bg: #F5F5DC; 
             --card-bg: #ffffff;
             --card-inner-bg: #fdfdfd;
             --text-color: #1a1a1a; 
+            --accent: #556B2F; /* Dark Olive */
             --track-bg: #e0e0e0;
             --input-bg: #ffffff;
             --btn-text-inactive: #555555;
@@ -85,13 +87,12 @@
             transition: background 0.3s ease;
         }
 
-        /* Rotating Border Effect */
         .app-card::before {
             content: '';
             position: absolute;
             width: 150%;
             height: 150%;
-            background: conic-gradient(transparent, transparent, transparent, var(--olive-dark));
+            background: conic-gradient(transparent, transparent, transparent, var(--accent));
             left: -25%;
             top: -25%;
             animation: rotateLight 7s linear infinite;
@@ -112,7 +113,7 @@
             to { transform: rotate(360deg); }
         }
 
-        h1 { color: var(--olive-dark); text-align: center; font-size: 24px; font-weight: 800; text-transform: uppercase; margin-bottom: 25px; }
+        h1 { color: var(--accent); text-align: center; font-size: 24px; font-weight: 800; text-transform: uppercase; margin-bottom: 25px; transition: color 0.3s; }
 
         .selector-track {
             position: relative;
@@ -125,6 +126,7 @@
             height: 48px;
             align-items: center;
             isolation: isolate; 
+            transition: background 0.3s, border 0.3s;
         }
 
         .selector-track button {
@@ -137,17 +139,19 @@
 
         .rolling-glider {
             position: absolute; height: calc(100% - 10px); width: calc(50% - 5px);
-            background: var(--olive-dark); border-radius: 40px; 
-            z-index: 1; left: 5px; transition: transform var(--rolling-speed);
+            background: var(--accent); border-radius: 40px; 
+            z-index: 1; left: 5px; transition: transform var(--rolling-speed), background 0.3s;
         }
 
-        .input-group label { display: block; font-size: 11px; color: var(--olive-dark); font-weight: 700; margin-bottom: 6px; text-transform: uppercase; }
+        .input-group label { display: block; font-size: 11px; color: var(--accent); font-weight: 700; margin-bottom: 6px; text-transform: uppercase; transition: color 0.3s; }
 
         input, select {
             width: 100%; border: 1px solid var(--border-color); background: var(--input-bg); padding: 12px;
             border-radius: 12px; color: var(--text-color); margin-bottom: 15px; box-sizing: border-box; 
-            font-family: 'Open Sans'; transition: all 0.3s ease;
+            font-family: 'Open Sans'; transition: all 0.3s ease; outline: none;
         }
+
+        input:focus { border-color: var(--accent); }
 
         .ct-grid, .grid-inputs { display: grid; gap: 10px; }
         .ct-grid { grid-template-columns: 1fr 1fr 1fr; }
@@ -155,24 +159,24 @@
         .course-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 
         .calc-btn {
-            width: 100%; background: var(--olive-dark); color: white; border: none; padding: 15px;
+            width: 100%; background: var(--accent); color: var(--btn-text-active); border: none; padding: 15px;
             border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; 
-            margin-top: 10px; font-family: 'Open Sans';
+            margin-top: 10px; font-family: 'Open Sans'; transition: background 0.3s, color 0.3s;
         }
 
         .reset-btn {
             width: 100%; background: transparent; color: var(--btn-text-inactive); border: 1px solid var(--border-color);
-            padding: 8px; margin-top: 10px; border-radius: 12px; cursor: pointer; font-size: 11px;
+            padding: 8px; margin-top: 10px; border-radius: 12px; cursor: pointer; font-size: 11px; transition: all 0.3s;
         }
 
         .result-box {
-            margin-top: 20px; padding: 15px; background: rgba(85, 107, 47, 0.1);
-            border: 2px solid var(--olive-dark); border-radius: 15px; text-align: center;
+            margin-top: 20px; padding: 15px; background: rgba(128, 128, 0, 0.05);
+            border: 2px solid var(--accent); border-radius: 15px; text-align: center; transition: border 0.3s;
         }
 
-        #displayResult { color: var(--olive-dark); font-weight: 700; }
+        #displayResult { color: var(--accent); font-weight: 700; }
 
-        .footer-credit { margin-top: 25px; text-align: center; font-size: 11px; color: var(--olive-dark); font-weight: 700; text-transform: uppercase; opacity: 0.9; }
+        .footer-credit { margin-top: 25px; text-align: center; font-size: 11px; color: var(--accent); font-weight: 700; text-transform: uppercase; opacity: 0.9; transition: color 0.3s; }
     </style>
 </head>
 <body>
@@ -228,7 +232,7 @@
                     <input type="number" step="0.01" class="c-gp" placeholder="GP">
                 </div>
             </div>
-            <button style="width:100%; background:none; color:var(--olive-dark); border:1px dashed var(--olive-dark); padding:8px; border-radius:10px; cursor:pointer; margin-bottom:15px; font-size:11px;" onclick="addRow()">+ Add Subject</button>
+            <button style="width:100%; background:none; color:var(--accent); border:1px dashed var(--accent); padding:8px; border-radius:10px; cursor:pointer; margin-bottom:15px; font-size:11px;" onclick="addRow()">+ Add Subject</button>
         </div>
         <button class="calc-btn" onclick="calculateCGPA()">Calculate CGPA</button>
     </div>
@@ -260,6 +264,7 @@
         glider.style.transform = isMark ? 'translateX(0)' : 'translateX(100%)';
         document.getElementById('tab-mark').classList.toggle('active', isMark);
         document.getElementById('tab-cgpa').classList.toggle('active', !isMark);
+        document.getElementById('resultBox').style.display = "none";
     }
 
     function setCredit(val) {
@@ -315,7 +320,7 @@
         box.style.display = "block";
         const d = document.getElementById('displayResult');
         d.innerText = msg;
-        d.style.color = err ? "#d9534f" : "var(--olive-dark)";
+        d.style.color = err ? "#d9534f" : "var(--accent)";
     }
 
     function resetForm() {
