@@ -10,23 +10,77 @@
             --gold: #D4AF37;
             --bg-dark: #0a0a0a;
             --rolling-speed: 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+
+            /* THEME VARIABLES */
+            --body-bg: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+            --card-bg: #0a0a0a;
+            --card-inner-bg: #0d0d0d;
+            --text-color: white;
+            --track-bg: #111;
+            --input-bg: var(--bg-dark);
+            --btn-text-inactive: #777;
+            --btn-text-active: #000;
+            --reset-btn-color: #888;
+            --theme-btn-bg: white; /* Button color in dark mode */
+            --theme-btn-text: black;
+        }
+
+        /* LIGHT THEME OVERRIDES */
+        .light-mode {
+            /* Aesthetic Light Colored Backgrounds */
+            --body-bg: radial-gradient(circle at center, #f5f7fa 0%, #c3cfe2 100%);
+            --card-bg: #ffffff;
+            --card-inner-bg: #fdfdfd;
+            
+            --text-color: #1a1a1a; /* Dark Text */
+            --track-bg: #e0e0e0;
+            --input-bg: #ffffff;
+            --btn-text-inactive: #555;
+            --btn-text-active: white;
+            --reset-btn-color: #444;
+
+            /* Button goes Dark in light mode */
+            --theme-btn-bg: #1a1a1a; 
+            --theme-btn-text: white;
         }
 
         body {
-            background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+            background: var(--body-bg);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: 'Open Sans', sans-serif;
             margin: 0;
-            color: white;
+            color: var(--text-color);
             padding: 20px;
+            transition: background 0.3s ease; /* Smooth bg change */
+        }
+
+        /* THEME TOGGLE BUTTON STYLING */
+        #theme-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--theme-btn-bg);
+            color: var(--theme-btn-text);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 10;
+            font-family: 'Open Sans', sans-serif;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         /* LIGHT EFFECT CONTAINER */
         .app-card {
-            background: #0a0a0a;
+            background: var(--card-bg);
             padding: 30px;
             border-radius: 25px;
             width: 100%;
@@ -37,6 +91,7 @@
             display: flex;
             flex-direction: column;
             z-index: 1;
+            transition: background 0.3s ease;
         }
 
         /* THE MOVING LIGHT EFFECT */
@@ -57,9 +112,10 @@
             content: '';
             position: absolute;
             inset: 2px;
-            background: #0d0d0d;
+            background: var(--card-inner-bg);
             border-radius: 23px;
             z-index: -1;
+            transition: background 0.3s ease;
         }
 
         @keyframes rotateLight {
@@ -82,7 +138,7 @@
         .selector-track {
             position: relative;
             display: flex;
-            background: #111;
+            background: var(--track-bg);
             border-radius: 50px;
             padding: 5px;
             margin-bottom: 20px;
@@ -91,13 +147,16 @@
             align-items: center;
             isolation: isolate; 
         }
+        
+        /* Thin border adjustment for light mode */
+        .light-mode .selector-track { border-color: #ccc; }
 
         .selector-track button {
             flex: 1;
             height: 100%;
             border: none;
             background: none;
-            color: #777;
+            color: var(--btn-text-inactive);
             font-weight: 700;
             cursor: pointer;
             z-index: 3;
@@ -106,7 +165,7 @@
             font-size: 13px;
         }
 
-        .selector-track button.active { color: #000; }
+        .selector-track button.active { color: var(--btn-text-active); }
 
         /* THE ROLLING CIRCLE/PILL */
         .rolling-glider {
@@ -123,24 +182,26 @@
 
         /* Inputs and Dropdown */
         input, select {
-            width: 100%; border: 1px solid #333; background: var(--bg-dark); padding: 12px;
-            border-radius: 12px; color: #fff; margin-bottom: 15px; box-sizing: border-box; 
+            width: 100%; border: 1px solid #333; background: var(--input-bg); padding: 12px;
+            border-radius: 12px; color: var(--text-color); margin-bottom: 15px; box-sizing: border-box; 
             font-size: 14px; font-family: 'Open Sans', sans-serif;
             transition: all 0.3s ease;
             outline: none;
         }
+        
+        .light-mode input, .light-mode select { border-color: #ccc; }
 
         /* INPUT FOCUS LIGHT EFFECT */
         input:focus, select:focus {
             border-color: var(--gold);
             box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-            background: #0d0d0d !important; /* Force dark background */
+            background: var(--card-inner-bg) !important; /* Force appropriate background */
         }
 
         /* FIXING DROPDOWN OPTIONS */
         select option {
-            background-color: #0d0d0d;
-            color: #fff;
+            background-color: var(--card-inner-bg);
+            color: var(--text-color);
         }
 
         .input-group label { display: block; font-size: 11px; color: var(--gold); font-weight: 700; margin-bottom: 6px; text-transform: uppercase; }
@@ -158,10 +219,11 @@
         }
 
         .reset-btn {
-            width: 100%; background: transparent; color: #888; border: 1px solid #333;
+            width: 100%; background: transparent; color: var(--reset-btn-color); border: 1px solid #333;
             padding: 8px; margin-top: 10px; border-radius: 12px; cursor: pointer; font-size: 11px;
             font-family: 'Open Sans', sans-serif;
         }
+        .light-mode .reset-btn { border-color: #ccc; }
 
         .result-box {
             margin-top: 20px; padding: 15px; background: rgba(212, 175, 55, 0.1);
@@ -185,6 +247,9 @@
 <body>
 
 <div class="app-card">
+    <!-- THEME TOGGLE BUTTON ADDED HERE -->
+    <button id="theme-toggle" onclick="toggleTheme()">Light</button>
+
     <h1>MIST GRADE METRIC</h1>
 
     <div class="selector-track">
@@ -256,6 +321,21 @@
 <script>
     let selectedCredit = 3;
 
+    // --- NEW THEME JS ---
+    function toggleTheme() {
+        const body = document.body;
+        const btn = document.getElementById('theme-toggle');
+        
+        body.classList.toggle('light-mode');
+        
+        if (body.classList.contains('light-mode')) {
+            btn.innerText = "Dark"; // Button prompt to switch back
+        } else {
+            btn.innerText = "Light";
+        }
+    }
+    // ----------------------
+
     function switchTab(tab) {
         const glider = document.getElementById('tabGlider');
         const isMark = (tab === 'mark');
@@ -283,7 +363,7 @@
 
     function calculateMark() {
         const cts = [parseFloat(document.getElementById('ct1').value), parseFloat(document.getElementById('ct2').value), parseFloat(document.getElementById('ct3').value)];
-        for(let v of cts) if (v > 20) return showResult("❌ Error: CT marks > 20!", true);
+        for(let v of cts) if (v > 20) return showResult("Error: CT marks exceeded 20!", true);
         let ctArray = cts.filter(n => !isNaN(n)).sort((a,b) => b-a);
         if (ctArray.length < 2) return alert("Enter 2 CT marks.");
         
@@ -294,7 +374,7 @@
 
         const maxM = selectedCredit === 2 ? 20 : 30;
         const maxO = selectedCredit === 2 ? 10 : 15;
-        if (mid > maxM || att > maxO || perf > maxO) return showResult(`❌ Error: Input exceeds limits!`, true);
+        if (mid > maxM || att > maxO || perf > maxO) return showResult(`Error: Input exceeds limits!`, true);
 
         let cur = ((ctArray[0]+ctArray[1])/2) + (mid/maxM*10) + (att/maxO*5) + (perf/maxO*5);
         let maxF = selectedCredit === 2 ? 120 : 180;
@@ -311,8 +391,8 @@
         for (let i = 0; i < credits.length; i++) {
             let c = parseFloat(credits[i].value), g = parseFloat(gps[i].value);
             if (!isNaN(c) && !isNaN(g)) {
-                if (![0.75, 1.5, 2.0, 3.0].includes(c)) return showResult(`❌ Error: Invalid Credit.`, true);
-                if (g < 0 || g > 4.0) return showResult(`❌ Error: GP 0-4.`, true);
+                if (![0.75, 1.5, 2.0, 3.0].includes(c)) return showResult(`Error: Invalid Credit.`, true);
+                if (g < 0 || g > 4.0) return showResult(`Error: Input between 0-4 GPA.`, true);
                 totalP += (c * g); totalC += c;
             }
         }
