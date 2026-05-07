@@ -4,87 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MIST GradeMetric</title>
+    
+    <link rel="icon" type="image/png" href="favicon.png">
+
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --gold: #D4AF37;
+            --bg-page: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+            --bg-card: #0a0a0a;
+            --bg-inner: #0d0d0d;
+            --bg-input: #0a0a0a;
+            --text-main: white;
+            --text-muted: #777;
+            --border-color: #333;
             --rolling-speed: 0.8s cubic-bezier(0.65, 0, 0.35, 1);
-
-            /* DARK THEME: Original Black & Gold */
-            --body-bg: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
-            --card-bg: #0a0a0a;
-            --card-inner-bg: #0d0d0d;
-            --text-color: #ffffff;
-            --accent: var(--gold);
-            --track-bg: #111111;
-            --input-bg: #0a0a0a;
-            --btn-text-inactive: #777777;
-            --btn-text-active: #000000;
-            --theme-btn-bg: #ffffff; 
-            --theme-btn-text: #000000;
-            --border-color: #333333;
         }
 
-        /* LIGHT THEME: Cream & Dark Olive */
+        /* Light Mode Overrides */
         .light-mode {
-            --body-bg: #F5F5DC; 
-            --card-bg: #ffffff;
-            --card-inner-bg: #fdfdfd;
-            --text-color: #1a1a1a; 
-            --accent: #556B2F; /* Dark Olive */
-            --track-bg: #e0e0e0;
-            --input-bg: #ffffff;
-            --btn-text-inactive: #555555;
-            --btn-text-active: #ffffff;
-            --theme-btn-bg: #3b2f2f; 
-            --theme-btn-text: #ffffff;
-            --border-color: #cccccc;
+            --bg-page: radial-gradient(circle at center, #f8f9fa 0%, #e9ecef 100%);
+            --bg-card: #ffffff;
+            --bg-inner: #ffffff;
+            --bg-input: #ffffff;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+            --border-color: #dfe6e9;
+            --gold: #b8860b;
         }
 
         body {
-            background: var(--body-bg);
-            background-attachment: fixed;
+            background: var(--bg-page);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: 'Open Sans', sans-serif;
             margin: 0;
-            color: var(--text-color);
+            color: var(--text-main);
             padding: 20px;
-            transition: background 0.4s ease;
+            transition: background 0.3s ease;
         }
 
-        #theme-toggle {
+        /* Theme Toggle in Top Right */
+        .theme-toggle {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            background: var(--theme-btn-bg);
-            color: var(--theme-btn-text);
-            border: none;
-            padding: 8px 18px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 800;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--gold);
+            padding: 10px;
+            border-radius: 50%;
             cursor: pointer;
-            text-transform: uppercase;
-            z-index: 100;
-            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            z-index: 10;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         .app-card {
-            background: var(--card-bg);
+            background: var(--bg-card);
             padding: 30px;
             border-radius: 25px;
             width: 100%;
             max-width: 400px;
             position: relative;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             z-index: 1;
-            transition: background 0.3s ease;
         }
 
         .app-card::before {
@@ -92,7 +86,7 @@
             position: absolute;
             width: 150%;
             height: 150%;
-            background: conic-gradient(transparent, transparent, transparent, var(--accent));
+            background: conic-gradient(transparent, transparent, transparent, var(--gold));
             left: -25%;
             top: -25%;
             animation: rotateLight 7s linear infinite;
@@ -101,11 +95,11 @@
 
         .app-card::after {
             content: '';
-            position: absolute; inset: 2px;
-            background: var(--card-inner-bg);
+            position: absolute;
+            inset: 2px;
+            background: var(--bg-inner);
             border-radius: 23px;
             z-index: -1;
-            transition: background 0.3s ease;
         }
 
         @keyframes rotateLight {
@@ -113,12 +107,20 @@
             to { transform: rotate(360deg); }
         }
 
-        h1 { color: var(--accent); text-align: center; font-size: 24px; font-weight: 800; text-transform: uppercase; margin-bottom: 25px; transition: color 0.3s; }
+        h1 { 
+            color: var(--gold); 
+            text-align: center; 
+            font-size: 24px; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            margin-bottom: 25px; 
+            letter-spacing: 1px;
+        }
 
         .selector-track {
             position: relative;
             display: flex;
-            background: var(--track-bg);
+            background: var(--bg-input);
             border-radius: 50px;
             padding: 5px;
             margin-bottom: 20px;
@@ -126,64 +128,94 @@
             height: 48px;
             align-items: center;
             isolation: isolate; 
-            transition: background 0.3s, border 0.3s;
         }
 
         .selector-track button {
-            flex: 1; height: 100%; border: none; background: none;
-            color: var(--btn-text-inactive); font-weight: 700; cursor: pointer;
-            z-index: 3; transition: color 0.4s ease; font-family: 'Open Sans';
+            flex: 1;
+            height: 100%;
+            border: none;
+            background: none;
+            color: var(--text-muted);
+            font-weight: 700;
+            cursor: pointer;
+            z-index: 3;
+            font-family: 'Open Sans', sans-serif;
+            transition: color 0.5s ease;
+            font-size: 13px;
         }
 
-        .selector-track button.active { color: var(--btn-text-active); }
+        .selector-track button.active { color: #000; }
 
         .rolling-glider {
-            position: absolute; height: calc(100% - 10px); width: calc(50% - 5px);
-            background: var(--accent); border-radius: 40px; 
-            z-index: 1; left: 5px; transition: transform var(--rolling-speed), background 0.3s;
+            position: absolute;
+            height: calc(100% - 10px);
+            width: calc(50% - 5px);
+            background: var(--gold);
+            border-radius: 40px; 
+            z-index: 1;
+            left: 5px;
+            transition: transform var(--rolling-speed);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
         }
-
-        .input-group label { display: block; font-size: 11px; color: var(--accent); font-weight: 700; margin-bottom: 6px; text-transform: uppercase; transition: color 0.3s; }
 
         input, select {
-            width: 100%; border: 1px solid var(--border-color); background: var(--input-bg); padding: 12px;
-            border-radius: 12px; color: var(--text-color); margin-bottom: 15px; box-sizing: border-box; 
-            font-family: 'Open Sans'; transition: all 0.3s ease; outline: none;
+            width: 100%; border: 1px solid var(--border-color); background: var(--bg-input); padding: 12px;
+            border-radius: 12px; color: var(--text-main); margin-bottom: 15px; box-sizing: border-box; 
+            font-size: 14px; font-family: 'Open Sans', sans-serif;
+            transition: all 0.3s ease;
+            outline: none;
         }
 
-        input:focus { border-color: var(--accent); }
+        input:focus, select:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            background: var(--bg-inner) !important;
+        }
 
+        .input-group label { display: block; font-size: 11px; color: var(--gold); font-weight: 700; margin-bottom: 6px; text-transform: uppercase; }
+        
         .ct-grid, .grid-inputs { display: grid; gap: 10px; }
         .ct-grid { grid-template-columns: 1fr 1fr 1fr; }
         .grid-inputs { grid-template-columns: 1fr 1fr; }
+
         .course-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 
         .calc-btn {
-            width: 100%; background: var(--accent); color: var(--btn-text-active); border: none; padding: 15px;
+            width: 100%; background: var(--gold); color: #000; border: none; padding: 15px;
             border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; 
-            margin-top: 10px; font-family: 'Open Sans'; transition: background 0.3s, color 0.3s;
+            margin-top: 10px; font-family: 'Open Sans', sans-serif;
         }
 
         .reset-btn {
-            width: 100%; background: transparent; color: var(--btn-text-inactive); border: 1px solid var(--border-color);
-            padding: 8px; margin-top: 10px; border-radius: 12px; cursor: pointer; font-size: 11px; transition: all 0.3s;
+            width: 100%; background: transparent; color: var(--text-muted); border: 1px solid var(--border-color);
+            padding: 8px; margin-top: 10px; border-radius: 12px; cursor: pointer; font-size: 11px;
         }
 
         .result-box {
-            margin-top: 20px; padding: 15px; background: rgba(128, 128, 0, 0.05);
-            border: 2px solid var(--accent); border-radius: 15px; text-align: center; transition: border 0.3s;
+            margin-top: 20px; padding: 15px; background: rgba(212, 175, 55, 0.1);
+            border: 2px solid var(--gold); border-radius: 15px; text-align: center;
         }
 
-        #displayResult { color: var(--accent); font-weight: 700; }
+        #displayResult { color: var(--gold); font-weight: 700; font-size: 15px; }
 
-        .footer-credit { margin-top: 25px; text-align: center; font-size: 11px; color: var(--accent); font-weight: 700; text-transform: uppercase; opacity: 0.9; transition: color 0.3s; }
+        .footer-credit { 
+            margin-top: 25px; 
+            text-align: center; 
+            font-size: 11px; 
+            color: var(--gold); 
+            font-weight: 700;
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
 
+<button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+
 <div class="app-card">
-    <button id="theme-toggle" onclick="toggleTheme()">Light Mode</button>
-    <h1>MIST GradeMetric</h1>
+    <h1>MIST GRADE METRIC</h1>
 
     <div class="selector-track">
         <div id="tabGlider" class="rolling-glider"></div>
@@ -192,7 +224,7 @@
     </div>
 
     <div id="mark-section">
-        <div class="selector-track" style="height: 40px;">
+        <div class="selector-track">
             <div id="creditGlider" class="rolling-glider" style="transform: translateX(100%);"></div>
             <button id="btn2" onclick="setCredit(2)">2.0 Credits</button>
             <button id="btn3" class="active" onclick="setCredit(3)">3.0 Credits</button>
@@ -216,7 +248,12 @@
                     <option value="80.0">4.00 (A+)</option>
                     <option value="75.0">3.75 (A)</option>
                     <option value="70.0">3.50 (A-)</option>
+                    <option value="65.0">3.25 (B+)</option>
                     <option value="60.0">3.00 (B)</option>
+                    <option value="55.0">2.75 (B-)</option>
+                    <option value="50.0">2.50 (C+)</option>
+                    <option value="45.0">2.25 (C)</option>
+                    <option value="40.0">2.00 (D)</option>
                 </select>
             </div>
         </div>
@@ -225,19 +262,19 @@
 
     <div id="cgpa-section" style="display: none;">
         <div class="input-group">
-            <label>COURSE DETAILS</label>
+            <label>ENTER SUBJECT DETAILS</label>
             <div id="course-rows">
                 <div class="course-row">
                     <input type="number" step="0.01" class="c-credit" placeholder="Credit">
-                    <input type="number" step="0.01" class="c-gp" placeholder="GP">
+                    <input type="number" step="0.01" class="c-gp" placeholder="GP (0.0-4.0)">
                 </div>
             </div>
-            <button style="width:100%; background:none; color:var(--accent); border:1px dashed var(--accent); padding:8px; border-radius:10px; cursor:pointer; margin-bottom:15px; font-size:11px;" onclick="addRow()">+ Add Subject</button>
+            <button style="width:100%; background:transparent; color:var(--gold); border:1px dashed var(--gold); padding:8px; border-radius:10px; cursor:pointer; margin-bottom:15px; font-size:11px;" onclick="addRow()">+ Add Subject</button>
         </div>
         <button class="calc-btn" onclick="calculateCGPA()">Calculate CGPA</button>
     </div>
 
-    <button class="reset-btn" onclick="resetForm()">Reset Fields</button>
+    <button class="reset-btn" onclick="resetForm()">Reset All</button>
 
     <div id="resultBox" class="result-box" style="display:none;">
         <div id="displayResult"></div>
@@ -251,9 +288,9 @@
 
     function toggleTheme() {
         const body = document.body;
-        const btn = document.getElementById('theme-toggle');
+        const btn = document.getElementById('themeBtn');
         body.classList.toggle('light-mode');
-        btn.innerText = body.classList.contains('light-mode') ? "Dark Mode" : "Light Mode";
+        btn.innerHTML = body.classList.contains('light-mode') ? '☀️' : '🌙';
     }
 
     function switchTab(tab) {
@@ -270,62 +307,72 @@
     function setCredit(val) {
         selectedCredit = val;
         const glider = document.getElementById('creditGlider');
-        glider.style.transform = (val === 2) ? 'translateX(0)' : 'translateX(100%)';
-        document.getElementById('btn2').classList.toggle('active', val === 2);
-        document.getElementById('btn3').classList.toggle('active', val === 3);
-        
-        document.getElementById('midLabel').innerText = `MID TERM (Max ${val === 2 ? 20 : 30})`;
-        document.getElementById('attLabel').innerText = `ATTENDANCE (Max ${val === 2 ? 10 : 15})`;
-        document.getElementById('perfLabel').innerText = `CLASS PERF. (Max ${val === 2 ? 10 : 15})`;
+        const isTwo = (val === 2);
+        glider.style.transform = isTwo ? 'translateX(0)' : 'translateX(100%)';
+        document.getElementById('btn2').classList.toggle('active', isTwo);
+        document.getElementById('btn3').classList.toggle('active', !isTwo);
+        const maxMid = isTwo ? 20 : 30;
+        const maxOther = isTwo ? 10 : 15;
+        document.getElementById('midLabel').innerText = `MID TERM (Max ${maxMid})`;
+        document.getElementById('attLabel').innerText = `ATTENDANCE (Max ${maxOther})`;
+        document.getElementById('perfLabel').innerText = `CLASS PERF. (Max ${maxOther})`;
     }
 
     function calculateMark() {
-        const cts = [parseFloat(document.getElementById('ct1').value)||0, parseFloat(document.getElementById('ct2').value)||0, parseFloat(document.getElementById('ct3').value)||0].sort((a,b)=>b-a);
+        const cts = [parseFloat(document.getElementById('ct1').value), parseFloat(document.getElementById('ct2').value), parseFloat(document.getElementById('ct3').value)];
+        for(let v of cts) if (v < 0 || v > 20) return showResult("Error: Invalid CT marks!", true);
+        let ctArray = cts.filter(n => !isNaN(n)).sort((a,b) => b-a);
+        if (ctArray.length < 2) return alert("Enter at least 2 CT marks.");
         const mid = parseFloat(document.getElementById('midterm').value) || 0;
         const att = parseFloat(document.getElementById('attendance').value) || 0;
         const perf = parseFloat(document.getElementById('performance').value) || 0;
         const target = parseFloat(document.getElementById('targetGPA').value);
-
         const maxM = selectedCredit === 2 ? 20 : 30;
         const maxO = selectedCredit === 2 ? 10 : 15;
-        const finalMax = selectedCredit === 2 ? 120 : 180;
-
-        let current = ((cts[0]+cts[1])/2) + (mid/maxM*10) + (att/maxO*5) + (perf/maxO*5);
-        let needed = ((target - current) / 60) * finalMax;
-
-        if (needed > finalMax) showResult("Target Unreachable", true);
-        else showResult(`NEED IN FINAL: ${Math.max(0, needed).toFixed(2)} / ${finalMax}`);
+        if (mid < 0 || mid > maxM || att < 0 || att > maxO || perf < 0 || perf > maxO) {
+            return showResult(`Error: Input exceeds limits!`, true);
+        }
+        let cur = ((ctArray[0]+ctArray[1])/2) + (mid/maxM*10) + (att/maxO*5) + (perf/maxO*5);
+        let maxF = selectedCredit === 2 ? 120 : 180;
+        let final = ((target - cur) / 60) * maxF;
+        if (final > maxF) showResult("Target Unreachable!", true);
+        else showResult(`NEED: ${Math.max(0, final).toFixed(2)} / ${maxF}`);
     }
 
     function calculateCGPA() {
         const credits = document.getElementsByClassName('c-credit');
         const gps = document.getElementsByClassName('c-gp');
-        let tP = 0, tC = 0;
-        for(let i=0; i<credits.length; i++) {
+        let totalP = 0, totalC = 0;
+        for (let i = 0; i < credits.length; i++) {
             let c = parseFloat(credits[i].value), g = parseFloat(gps[i].value);
-            if(!isNaN(c) && !isNaN(g)) { tP += (c*g); tC += c; }
+            if (!isNaN(c) && !isNaN(g)) {
+                if (![0.75, 1.5, 2.0, 3.0].includes(c)) return showResult(`Error: Invalid Credit.`, true);
+                if (g < 0 || g > 4.0) return showResult(`Error: Max GPA is 4.0.`, true);
+                totalP += (c * g); totalC += c;
+            }
         }
-        if(tC > 0) showResult(`ESTIMATED GPA: ${(tP/tC).toFixed(2)}`);
+        if (totalC === 0) return alert("Enter values!");
+        showResult(`ESTIMATED GPA: ${(totalP / totalC).toFixed(2)}`);
     }
 
     function addRow() {
-        const row = document.createElement('div');
-        row.className = 'course-row';
-        row.innerHTML = `<input type="number" step="0.01" class="c-credit" placeholder="Credit"><input type="number" step="0.01" class="c-gp" placeholder="GP">`;
-        document.getElementById('course-rows').appendChild(row);
+        const div = document.createElement('div');
+        div.className = 'course-row';
+        div.innerHTML = `<input type="number" step="0.01" class="c-credit" placeholder="Credit"><input type="number" step="0.01" class="c-gp" placeholder="GP">`;
+        document.getElementById('course-rows').appendChild(div);
     }
 
     function showResult(msg, err=false) {
-        const box = document.getElementById('resultBox');
-        box.style.display = "block";
+        document.getElementById('resultBox').style.display = "block";
         const d = document.getElementById('displayResult');
-        d.innerText = msg;
-        d.style.color = err ? "#d9534f" : "var(--accent)";
+        d.innerHTML = msg; d.style.color = err ? "#ff4d4d" : "var(--gold)";
     }
 
     function resetForm() {
         document.querySelectorAll('input').forEach(i => i.value = '');
+        document.getElementById('course-rows').innerHTML = `<div class="course-row"><input type="number" step="0.01" class="c-credit" placeholder="Credit"><input type="number" step="0.01" class="c-gp" placeholder="GP"></div>`;
         document.getElementById('resultBox').style.display = "none";
+        setCredit(3); switchTab('mark');
     }
 </script>
 </body>
