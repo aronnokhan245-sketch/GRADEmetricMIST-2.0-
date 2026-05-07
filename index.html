@@ -143,7 +143,9 @@
             font-size: 13px;
         }
 
-        .selector-track button.active { color: #fff; }
+        /* Set text to black for active buttons/gliders on Gold backgrounds */
+        .selector-track button.active { color: #000; }
+        .light-mode .selector-track button.active { color: #fff; }
 
         .rolling-glider {
             position: absolute;
@@ -174,10 +176,13 @@
         .course-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 
         .calc-btn {
-            width: 100%; background: var(--gold); color: #fff; border: none; padding: 15px;
+            width: 100%; background: var(--gold); color: #000; border: none; padding: 15px;
             border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; 
             margin-top: 10px;
         }
+        
+        /* White text for the Blue button in light mode */
+        .light-mode .calc-btn { color: #fff; }
 
         .reset-btn {
             width: 100%; background: transparent; color: var(--text-muted); border: 1px solid var(--border-color);
@@ -185,11 +190,13 @@
         }
 
         .result-box {
-            margin-top: 20px; padding: 15px; background: rgba(9, 132, 227, 0.1);
+            margin-top: 20px; padding: 15px; background: rgba(212, 175, 55, 0.1);
             border: 2px solid var(--gold); border-radius: 15px; text-align: center;
         }
 
         #displayResult { color: var(--gold); font-weight: 700; font-size: 15px; }
+        /* Ensuring result numbers are black when background is fully gold (if applicable) */
+        .result-box.highlight { color: #000; }
 
         .footer-credit { 
             margin-top: 25px; 
