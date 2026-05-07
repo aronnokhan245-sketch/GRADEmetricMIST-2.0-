@@ -21,16 +21,16 @@
             --rolling-speed: 0.8s cubic-bezier(0.65, 0, 0.35, 1);
         }
 
-        /* Light Mode Overrides */
+        /* Modern Slate Light Mode Overrides */
         .light-mode {
-            --bg-page: radial-gradient(circle at center, #f8f9fa 0%, #e9ecef 100%);
+            --bg-page: #f0f2f5;
             --bg-card: #ffffff;
             --bg-inner: #ffffff;
-            --bg-input: #ffffff;
+            --bg-input: #f8f9fa;
             --text-main: #2d3436;
             --text-muted: #636e72;
-            --border-color: #dfe6e9;
-            --gold: #b8860b;
+            --border-color: #dcdde1;
+            --gold: #0984E3; /* Changed to a clean Blue for a better light-mode feel */
         }
 
         body {
@@ -43,10 +43,9 @@
             margin: 0;
             color: var(--text-main);
             padding: 20px;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
         }
 
-        /* Theme Toggle in Top Right */
         .theme-toggle {
             position: absolute;
             top: 20px;
@@ -57,14 +56,14 @@
             padding: 10px;
             border-radius: 50%;
             cursor: pointer;
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 20px;
             z-index: 10;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .app-card {
@@ -74,7 +73,7 @@
             width: 100%;
             max-width: 400px;
             position: relative;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 45px rgba(0,0,0,0.2);
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -144,7 +143,8 @@
             font-size: 13px;
         }
 
-        .selector-track button.active { color: #000; }
+        .selector-track button.active { color: #fff; }
+        .light-mode .selector-track button.active { color: #fff; }
 
         .rolling-glider {
             position: absolute;
@@ -155,7 +155,7 @@
             z-index: 1;
             left: 5px;
             transition: transform var(--rolling-speed);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
         input, select {
@@ -168,8 +168,7 @@
 
         input:focus, select:focus {
             border-color: var(--gold);
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-            background: var(--bg-inner) !important;
+            box-shadow: 0 0 10px rgba(9, 132, 227, 0.2);
         }
 
         .input-group label { display: block; font-size: 11px; color: var(--gold); font-weight: 700; margin-bottom: 6px; text-transform: uppercase; }
@@ -181,7 +180,7 @@
         .course-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 
         .calc-btn {
-            width: 100%; background: var(--gold); color: #000; border: none; padding: 15px;
+            width: 100%; background: var(--gold); color: #fff; border: none; padding: 15px;
             border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; 
             margin-top: 10px; font-family: 'Open Sans', sans-serif;
         }
@@ -192,7 +191,7 @@
         }
 
         .result-box {
-            margin-top: 20px; padding: 15px; background: rgba(212, 175, 55, 0.1);
+            margin-top: 20px; padding: 15px; background: rgba(9, 132, 227, 0.1);
             border: 2px solid var(--gold); border-radius: 15px; text-align: center;
         }
 
