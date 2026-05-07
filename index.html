@@ -59,7 +59,6 @@
             z-index: 1;
         }
 
-        /* Moving Toggle Inside the Box */
         .theme-toggle {
             position: absolute;
             top: 15px;
@@ -109,7 +108,7 @@
         h1 { 
             color: var(--gold); 
             text-align: center; 
-            font-size: 28px; /* Increased by one level */
+            font-size: 28px; 
             font-weight: 800; 
             text-transform: uppercase; 
             margin-bottom: 25px; 
@@ -164,9 +163,7 @@
             outline: none;
         }
 
-        input:focus, select:focus {
-            border-color: var(--gold);
-        }
+        input:focus, select:focus { border-color: var(--gold); }
 
         .input-group label { display: block; font-size: 11px; color: var(--gold); font-weight: 700; margin-bottom: 6px; text-transform: uppercase; }
         
@@ -295,6 +292,7 @@
         glider.style.transform = isMark ? 'translateX(0)' : 'translateX(100%)';
         document.getElementById('tab-mark').classList.toggle('active', isMark);
         document.getElementById('tab-cgpa').classList.toggle('active', !isMark);
+        document.getElementById('resultBox').style.display = "none";
     }
 
     function setCredit(val) {
@@ -313,6 +311,7 @@
 
     function calculateMark() {
         const cts = [parseFloat(document.getElementById('ct1').value), parseFloat(document.getElementById('ct2').value), parseFloat(document.getElementById('ct3').value)];
+        for(let v of cts) if (v < 0 || v > 20) return showResult("Error: Invalid CT marks!", true);
         let ctArray = cts.filter(n => !isNaN(n)).sort((a,b) => b-a);
         if (ctArray.length < 2) return alert("Enter at least 2 CT marks.");
         const mid = parseFloat(document.getElementById('midterm').value) || 0;
@@ -321,6 +320,8 @@
         const target = parseFloat(document.getElementById('targetGPA').value);
         const maxM = selectedCredit === 2 ? 20 : 30;
         const maxO = selectedCredit === 2 ? 10 : 15;
+        if (mid < 0 || mid > maxM || att < 0 || att > maxO || perf < 0 || perf > maxO) return showResult(`Error: Input exceeds limits!`, true);
+        
         let cur = ((ctArray[0]+ctArray[1])/2) + (mid/maxM*10) + (att/maxO*5) + (perf/maxO*5);
         let maxF = selectedCredit === 2 ? 120 : 180;
         let final = ((target - cur) / 60) * maxF;
@@ -334,6 +335,8 @@
         for (let i = 0; i < credits.length; i++) {
             let c = parseFloat(credits[i].value), g = parseFloat(gps[i].value);
             if (!isNaN(c) && !isNaN(g)) {
+                if (![0.75, 1.5, 2.0, 3.0].includes(c)) return showResult(`Error: Invalid Credit.`, true);
+                if (g < 0 || g > 4.0) return showResult(`Error: Max GPA is 4.0.`, true);
                 totalP += (c * g); totalC += c;
             }
         }
@@ -356,7 +359,9 @@
 
     function resetForm() {
         document.querySelectorAll('input').forEach(i => i.value = '');
+        document.getElementById('course-rows').innerHTML = `<div class="course-row"><input type="number" step="0.01" class="c-credit" placeholder="Credit"><input type="number" step="0.01" class="c-gp" placeholder="GP"></div>`;
         document.getElementById('resultBox').style.display = "none";
+        setCredit(3); switchTab('mark');
     }
 </script>
 </body>
