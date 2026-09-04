@@ -143,7 +143,11 @@
             font-size: 13px;
         }
 
-        /* Set text to black for active buttons/gliders on Gold backgrounds */
+        /* Dynamic glider widths for 2 vs 3 button track layouts */
+        .selector-track.three-options .rolling-glider {
+            width: calc(33.333% - 3.33px);
+        }
+
         .selector-track button.active { color: #000; }
         .light-mode .selector-track button.active { color: #fff; }
 
@@ -171,6 +175,7 @@
         
         .ct-grid, .grid-inputs { display: grid; gap: 10px; }
         .ct-grid { grid-template-columns: 1fr 1fr 1fr; }
+        .ct-grid.four-cols { grid-template-columns: 1fr 1fr 1fr 1fr; }
         .grid-inputs { grid-template-columns: 1fr 1fr; }
 
         .course-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
@@ -181,7 +186,6 @@
             margin-top: 10px;
         }
         
-        /* White text for the Blue button in light mode */
         .light-mode .calc-btn { color: #fff; }
 
         .reset-btn {
@@ -195,7 +199,6 @@
         }
 
         #displayResult { color: var(--gold); font-weight: 700; font-size: 15px; }
-        /* Ensuring result numbers are black when background is fully gold (if applicable) */
         .result-box.highlight { color: #000; }
 
         .footer-credit { 
@@ -222,18 +225,20 @@
     </div>
 
     <div id="mark-section">
-        <div class="selector-track">
+        <div class="selector-track three-options">
             <div id="creditGlider" class="rolling-glider" style="transform: translateX(100%);"></div>
-            <button id="btn2" onclick="setCredit(2)">2.0 Credits</button>
-            <button id="btn3" class="active" onclick="setCredit(3)">3.0 Credits</button>
+            <button id="btn2" onclick="setCredit(2)">2.0 Cr</button>
+            <button id="btn3" class="active" onclick="setCredit(3)">3.0 Cr</button>
+            <button id="btn4" onclick="setCredit(4)">4.0 Cr</button>
         </div>
 
         <div class="input-group">
-            <label>CT MARKS (Max 20)</label>
-            <div class="ct-grid">
+            <label id="ctLabel">CT MARKS (Max 20)</label>
+            <div class="ct-grid" id="ctGrid">
                 <input type="number" id="ct1" placeholder="CT 1">
                 <input type="number" id="ct2" placeholder="CT 2">
                 <input type="number" id="ct3" placeholder="CT 3">
+                <input type="number" id="ct4" placeholder="CT 4" style="display: none;">
             </div>
         </div>
         <div class="grid-inputs">
@@ -305,33 +310,90 @@
     function setCredit(val) {
         selectedCredit = val;
         const glider = document.getElementById('creditGlider');
-        const isTwo = (val === 2);
-        glider.style.transform = isTwo ? 'translateX(0)' : 'translateX(100%)';
-        document.getElementById('btn2').classList.toggle('active', isTwo);
-        document.getElementById('btn3').classList.toggle('active', !isTwo);
-        const maxMid = isTwo ? 20 : 30;
-        const maxOther = isTwo ? 10 : 15;
+        const ct4 = document.getElementById('ct4');
+        const ctGrid = document.getElementById('ctGrid');
+
+        document.getElementById('btn2').classList.toggle('active', val === 2);
+        document.getElementById('btn3').classList.toggle('active', val === 3);
+        document.getElementById('btn4').classList.toggle('active', val === 4);
+
+        if (val === 2) {
+            glider.style.transform = 'translateX(0%)';
+        } else if (val === 3) {
+            glider.style.transform = 'translateX(100%)';
+        } else if (val === 4) {
+            glider.style.transform = 'translateX(200%)';
+        }
+
+        if (val === 4) {
+            ct4.style.display = 'block';
+            ctGrid.classList.add('four-cols');
+        } else {
+            ct4.style.display = 'none';
+            ct4.value = '';
+            ctGrid.classList.remove('four-cols');
+        }
+
+        let maxMid = 30;
+        let maxOther = 15;
+        if (val === 2) {
+            maxMid = 20;
+            maxOther = 10;
+        } else if (val === 4) {
+            maxMid = 40;
+            maxOther = 20;
+        }
+
         document.getElementById('midLabel').innerText = `MID TERM (Max ${maxMid})`;
         document.getElementById('attLabel').innerText = `ATTENDANCE (Max ${maxOther})`;
         document.getElementById('perfLabel').innerText = `CLASS PERF. (Max ${maxOther})`;
     }
 
     function calculateMark() {
-        const cts = [parseFloat(document.getElementById('ct1').value), parseFloat(document.getElementById('ct2').value), parseFloat(document.getElementById('ct3').value)];
-        for(let v of cts) if (v < 0 || v > 20) return showResult("Error: Invalid CT marks!", true);
-        let ctArray = cts.filter(n => !isNaN(n)).sort((a,b) => b-a);
-        if (ctArray.length < 2) return alert("Enter at least 2 CT marks.");
+        const cts = [
+            parseFloat(document.getElementById('ct1').value),
+            parseFloat(document.getElementById('ct2').value),
+            parseFloat(document.getElementById('ct3').value),
+            parseFloat(document.getElementById('ct4').value)
+        ];
+
+        for (let i = 0; i < (selectedCredit === 4 ? 4 : 3); i++) {
+            if (cts[i] < 0 || cts[i] > 20) return showResult("Error: Invalid CT marks!", true);
+        }
+
+        let ctArray = cts.slice(0, selectedCredit === 4 ? 4 : 3).filter(n => !isNaN(n)).sort((a,b) => b-a);
+        const requiredCount = selectedCredit === 4 ? 3 : 2;
+
+        if (ctArray.length < requiredCount) {
+            return alert(`Enter at least ${requiredCount} CT marks.`);
+        }
+
         const mid = parseFloat(document.getElementById('midterm').value) || 0;
         const att = parseFloat(document.getElementById('attendance').value) || 0;
         const perf = parseFloat(document.getElementById('performance').value) || 0;
         const target = parseFloat(document.getElementById('targetGPA').value);
-        const maxM = selectedCredit === 2 ? 20 : 30;
-        const maxO = selectedCredit === 2 ? 10 : 15;
-        if (mid < 0 || mid > maxM || att < 0 || att > maxO || perf < 0 || perf > maxO) return showResult(`Error: Input exceeds limits!`, true);
-        
-        let cur = ((ctArray[0]+ctArray[1])/2) + (mid/maxM*10) + (att/maxO*5) + (perf/maxO*5);
-        let maxF = selectedCredit === 2 ? 120 : 180;
+
+        let maxM = 30;
+        let maxO = 15;
+        let maxF = 180;
+
+        if (selectedCredit === 2) {
+            maxM = 20; maxO = 10; maxF = 120;
+        } else if (selectedCredit === 4) {
+            maxM = 40; maxO = 20; maxF = 240;
+        }
+
+        if (mid < 0 || mid > maxM || att < 0 || att > maxO || perf < 0 || perf > maxO) {
+            return showResult(`Error: Input exceeds limits!`, true);
+        }
+
+        let ctAvg = selectedCredit === 4 
+            ? (ctArray[0] + ctArray[1] + ctArray[2]) / 3 
+            : (ctArray[0] + ctArray[1]) / 2;
+
+        let cur = (ctAvg) + (mid / maxM * 10) + (att / maxO * 5) + (perf / maxO * 5);
         let final = ((target - cur) / 60) * maxF;
+
         showResult(final > maxF ? "Target Unreachable!" : `NEED: ${Math.max(0, final).toFixed(2)} / ${maxF}`, final > maxF);
     }
 
@@ -342,7 +404,7 @@
         for (let i = 0; i < credits.length; i++) {
             let c = parseFloat(credits[i].value), g = parseFloat(gps[i].value);
             if (!isNaN(c) && !isNaN(g)) {
-                if (![0.75, 1.5, 2.0, 3.0].includes(c)) return showResult(`Error: Invalid Credit.`, true);
+                if (![0.75, 1.5, 2.0, 3.0, 4.0].includes(c)) return showResult(`Error: Invalid Credit.`, true);
                 if (g < 0 || g > 4.0) return showResult(`Error: Max GPA is 4.0.`, true);
                 totalP += (c * g); totalC += c;
             }
