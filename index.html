@@ -129,7 +129,6 @@
             isolation: isolate; 
         }
 
-        /* Standardized styles for track buttons */
         .selector-track button {
             flex: 1;
             height: 100%;
@@ -183,7 +182,6 @@
         .course-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
         .sem-row { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 
-        /* General Button Styles */
         .calc-btn {
             width: 100%; background: var(--gold); color: #000; border: none; padding: 14px;
             border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; 
@@ -291,6 +289,7 @@
             <button id="btn-overall-sem" onclick="switchCGPAMode('overall')">Overall</button>
         </div>
 
+        <!-- Single Semester View -->
         <div id="single-sem-view">
             <div class="input-group">
                 <label>ENTER SUBJECT DETAILS</label>
@@ -305,6 +304,7 @@
             <button class="calc-btn" onclick="calculateCGPA()">Calculate Semester GPA</button>
         </div>
 
+        <!-- Overall Semesters View -->
         <div id="overall-sem-view" style="display: none;">
             <div class="input-group">
                 <label>ENTER SEMESTER DETAILS</label>
@@ -346,4 +346,176 @@
         const isMark = (tab === 'mark');
         document.getElementById('mark-section').style.display = isMark ? 'block' : 'none';
         document.getElementById('cgpa-section').style.display = isMark ? 'none' : 'block';
-        glider.style.transform
+        glider.style.transform = isMark ? 'translateX(0)' : 'translateX(100%)';
+        document.getElementById('tab-mark').classList.toggle('active', isMark);
+        document.getElementById('tab-cgpa').classList.toggle('active', !isMark);
+        document.getElementById('resultBox').style.display = "none";
+    }
+
+    function switchCGPAMode(mode) {
+        cgpaMode = mode;
+        const glider = document.getElementById('cgpaModeGlider');
+        const isSingle = (mode === 'single');
+        document.getElementById('single-sem-view').style.display = isSingle ? 'block' : 'none';
+        document.getElementById('overall-sem-view').style.display = isSingle ? 'none' : 'block';
+        glider.style.transform = isSingle ? 'translateX(0)' : 'translateX(100%)';
+        document.getElementById('btn-single-sem').classList.toggle('active', isSingle);
+        document.getElementById('btn-overall-sem').classList.toggle('active', !isSingle);
+        document.getElementById('resultBox').style.display = "none";
+    }
+
+    function setCredit(val) {
+        selectedCredit = val;
+        const glider = document.getElementById('creditGlider');
+        const ct4 = document.getElementById('ct4');
+        const ctGrid = document.getElementById('ctGrid');
+
+        document.getElementById('btn2').classList.toggle('active', val === 2);
+        document.getElementById('btn3').classList.toggle('active', val === 3);
+        document.getElementById('btn4').classList.toggle('active', val === 4);
+
+        if (val === 2) {
+            glider.style.transform = 'translateX(0%)';
+        } else if (val === 3) {
+            glider.style.transform = 'translateX(100%)';
+        } else if (val === 4) {
+            glider.style.transform = 'translateX(200%)';
+        }
+
+        if (val === 4) {
+            ct4.style.display = 'block';
+            ctGrid.classList.add('four-cols');
+        } else {
+            ct4.style.display = 'none';
+            ct4.value = '';
+            ctGrid.classList.remove('four-cols');
+        }
+
+        let maxMid = 30;
+        let maxOther = 15;
+        if (val === 2) {
+            maxMid = 20;
+            maxOther = 10;
+        } else if (val === 4) {
+            maxMid = 40;
+            maxOther = 20;
+        }
+
+        document.getElementById('midLabel').innerText = `MID TERM (Max ${maxMid})`;
+        document.getElementById('attLabel').innerText = `ATTENDANCE (Max ${maxOther})`;
+        document.getElementById('perfLabel').innerText = `CLASS PERF. (Max ${maxOther})`;
+    }
+
+    function calculateMark() {
+        const cts = [
+            parseFloat(document.getElementById('ct1').value),
+            parseFloat(document.getElementById('ct2').value),
+            parseFloat(document.getElementById('ct3').value),
+            parseFloat(document.getElementById('ct4').value)
+        ];
+
+        for (let i = 0; i < (selectedCredit === 4 ? 4 : 3); i++) {
+            if (cts[i] < 0 || cts[i] > 20) return showResult("Error: Invalid CT marks!", true);
+        }
+
+        let ctArray = cts.slice(0, selectedCredit === 4 ? 4 : 3).filter(n => !isNaN(n)).sort((a,b) => b-a);
+        const requiredCount = selectedCredit === 4 ? 3 : 2;
+
+        if (ctArray.length < requiredCount) {
+            return alert(`Enter at least ${requiredCount} CT marks.`);
+        }
+
+        const mid = parseFloat(document.getElementById('midterm').value) || 0;
+        const att = parseFloat(document.getElementById('attendance').value) || 0;
+        const perf = parseFloat(document.getElementById('performance').value) || 0;
+        const target = parseFloat(document.getElementById('targetGPA').value);
+
+        let maxM = 30;
+        let maxO = 15;
+        let maxF = 180;
+
+        if (selectedCredit === 2) {
+            maxM = 20; maxO = 10; maxF = 120;
+        } else if (selectedCredit === 4) {
+            maxM = 40; maxO = 20; maxF = 240;
+        }
+
+        if (mid < 0 || mid > maxM || att < 0 || att > maxO || perf < 0 || perf > maxO) {
+            return showResult(`Error: Input exceeds limits!`, true);
+        }
+
+        let ctAvg = selectedCredit === 4 
+            ? (ctArray[0] + ctArray[1] + ctArray[2]) / 3 
+            : (ctArray[0] + ctArray[1]) / 2;
+
+        let cur = (ctAvg) + (mid / maxM * 10) + (att / maxO * 5) + (perf / maxO * 5);
+        let final = ((target - cur) / 60) * maxF;
+
+        showResult(final > maxF ? "Target Unreachable!" : `NEED: ${Math.max(0, final).toFixed(2)} / ${maxF}`, final > maxF);
+    }
+
+    function calculateCGPA() {
+        const credits = document.getElementsByClassName('c-credit');
+        const gps = document.getElementsByClassName('c-gp');
+        let totalP = 0, totalC = 0;
+        for (let i = 0; i < credits.length; i++) {
+            let c = parseFloat(credits[i].value), g = parseFloat(gps[i].value);
+            if (!isNaN(c) && !isNaN(g)) {
+                if (![0.75, 1.5, 2.0, 3.0, 4.0].includes(c)) return showResult(`Error: Invalid Credit.`, true);
+                if (g < 0 || g > 4.0) return showResult(`Error: Max GPA is 4.0.`, true);
+                totalP += (c * g); totalC += c;
+            }
+        }
+        if (totalC === 0) return alert("Enter values!");
+        showResult(`ESTIMATED GPA: ${(totalP / totalC).toFixed(2)}`);
+    }
+
+    function calculateOverallCGPA() {
+        const credits = document.getElementsByClassName('s-credit');
+        const gpas = document.getElementsByClassName('s-gpa');
+        let totalPoints = 0, totalCredits = 0;
+
+        for (let i = 0; i < credits.length; i++) {
+            let c = parseFloat(credits[i].value), g = parseFloat(gpas[i].value);
+            if (!isNaN(c) && !isNaN(g)) {
+                if (c <= 0) return showResult(`Error: Invalid Credit hours.`, true);
+                if (g < 0 || g > 4.0) return showResult(`Error: Max GPA is 4.0.`, true);
+                totalPoints += (c * g);
+                totalCredits += c;
+            }
+        }
+
+        if (totalCredits === 0) return alert("Enter values!");
+        showResult(`OVERALL CGPA: ${(totalPoints / totalCredits).toFixed(2)}`);
+    }
+
+    function addRow() {
+        const div = document.createElement('div');
+        div.className = 'course-row';
+        div.innerHTML = `<input type="number" step="0.01" class="c-credit" placeholder="Credit"><input type="number" step="0.01" class="c-gp" placeholder="GP">`;
+        document.getElementById('course-rows').appendChild(div);
+    }
+
+    function addSemRow() {
+        const div = document.createElement('div');
+        div.className = 'sem-row';
+        div.innerHTML = `<input type="text" class="s-name" placeholder="Sem"><input type="number" step="0.01" class="s-credit" placeholder="Total Cr"><input type="number" step="0.01" class="s-gpa" placeholder="GPA">`;
+        document.getElementById('sem-rows').appendChild(div);
+    }
+
+    function showResult(msg, err=false) {
+        document.getElementById('resultBox').style.display = "block";
+        const d = document.getElementById('displayResult');
+        d.innerHTML = msg; d.style.color = err ? "#ff4d4d" : "var(--gold)";
+    }
+
+    function resetForm() {
+        document.querySelectorAll('input').forEach(i => i.value = '');
+        document.getElementById('course-rows').innerHTML = `<div class="course-row"><input type="number" step="0.01" class="c-credit" placeholder="Credit"><input type="number" step="0.01" class="c-gp" placeholder="GP"></div>`;
+        document.getElementById('sem-rows').innerHTML = `<div class="sem-row"><input type="text" class="s-name" placeholder="Sem (e.g. L1T1)"><input type="number" step="0.01" class="s-credit" placeholder="Total Cr"><input type="number" step="0.01" class="s-gpa" placeholder="GPA"></div>`;
+        document.getElementById('resultBox').style.display = "none";
+        setCredit(3); switchTab('mark'); switchCGPAMode('single');
+    }
+</script>
+</body>
+</html>
