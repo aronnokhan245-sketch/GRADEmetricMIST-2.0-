@@ -7,7 +7,7 @@
     
     <link rel="icon" type="image/png" href="favicon.png">
 
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
     <style>
         :root {
             --gold: #D4AF37;
@@ -50,7 +50,7 @@
             padding: 30px;
             border-radius: 25px;
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             position: relative;
             box-shadow: 0 15px 45px rgba(0,0,0,0.2);
             overflow: hidden;
@@ -108,12 +108,12 @@
         h1 { 
             color: var(--gold); 
             text-align: center; 
-            font-size: 28px; 
+            font-size: 26px; 
             font-weight: 800; 
             text-transform: uppercase; 
-            margin-bottom: 25px; 
+            margin-bottom: 22px; 
             margin-top: 10px;
-            letter-spacing: 1.5px;
+            letter-spacing: 1.8px;
         }
 
         .selector-track {
@@ -129,21 +129,23 @@
             isolation: isolate; 
         }
 
+        /* Standardized styles for track buttons */
         .selector-track button {
             flex: 1;
             height: 100%;
             border: none;
             background: none;
             color: var(--text-muted);
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
             z-index: 3;
             font-family: 'Open Sans', sans-serif;
-            transition: color 0.5s ease;
+            transition: color 0.4s ease, font-size 0.2s ease;
             font-size: 13px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
         }
 
-        /* Dynamic glider widths for 2 vs 3 button track layouts */
         .selector-track.three-options .rolling-glider {
             width: calc(33.333% - 3.33px);
         }
@@ -171,7 +173,7 @@
 
         input:focus, select:focus { border-color: var(--gold); }
 
-        .input-group label { display: block; font-size: 11px; color: var(--gold); font-weight: 700; margin-bottom: 6px; text-transform: uppercase; }
+        .input-group label { display: block; font-size: 11px; color: var(--gold); font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
         
         .ct-grid, .grid-inputs { display: grid; gap: 10px; }
         .ct-grid { grid-template-columns: 1fr 1fr 1fr; }
@@ -179,26 +181,44 @@
         .grid-inputs { grid-template-columns: 1fr 1fr; }
 
         .course-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .sem-row { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 
+        /* General Button Styles */
         .calc-btn {
-            width: 100%; background: var(--gold); color: #000; border: none; padding: 15px;
+            width: 100%; background: var(--gold); color: #000; border: none; padding: 14px;
             border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; 
-            margin-top: 10px;
+            margin-top: 10px; font-family: 'Open Sans', sans-serif;
+            font-size: 14px; letter-spacing: 1px; transition: opacity 0.2s ease, transform 0.1s ease;
         }
         
+        .calc-btn:active { transform: scale(0.99); }
         .light-mode .calc-btn { color: #fff; }
+
+        .add-btn {
+            width: 100%; background: transparent; color: var(--gold); 
+            border: 1px dashed var(--gold); padding: 10px; border-radius: 10px; 
+            cursor: pointer; margin-bottom: 15px; font-size: 12px; font-weight: 700;
+            font-family: 'Open Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.5px;
+            transition: background 0.2s ease;
+        }
+
+        .add-btn:hover { background: rgba(212, 175, 55, 0.08); }
 
         .reset-btn {
             width: 100%; background: transparent; color: var(--text-muted); border: 1px solid var(--border-color);
-            padding: 8px; margin-top: 10px; border-radius: 12px; cursor: pointer; font-size: 11px;
+            padding: 9px; margin-top: 10px; border-radius: 12px; cursor: pointer; font-size: 11px;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; font-family: 'Open Sans', sans-serif;
+            transition: border-color 0.2s ease, color 0.2s ease;
         }
+
+        .reset-btn:hover { color: var(--text-main); border-color: var(--text-muted); }
 
         .result-box {
             margin-top: 20px; padding: 15px; background: rgba(212, 175, 55, 0.1);
             border: 2px solid var(--gold); border-radius: 15px; text-align: center;
         }
 
-        #displayResult { color: var(--gold); font-weight: 700; font-size: 15px; }
+        #displayResult { color: var(--gold); font-weight: 700; font-size: 15px; letter-spacing: 0.5px; }
         .result-box.highlight { color: #000; }
 
         .footer-credit { 
@@ -209,6 +229,7 @@
             font-weight: 700;
             text-transform: uppercase; 
             opacity: 0.9;
+            letter-spacing: 0.8px;
         }
     </style>
 </head>
@@ -264,17 +285,40 @@
     </div>
 
     <div id="cgpa-section" style="display: none;">
-        <div class="input-group">
-            <label>ENTER SUBJECT DETAILS</label>
-            <div id="course-rows">
-                <div class="course-row">
-                    <input type="number" step="0.01" class="c-credit" placeholder="Credit">
-                    <input type="number" step="0.01" class="c-gp" placeholder="GP (0.0-4.0)">
-                </div>
-            </div>
-            <button style="width:100%; background:transparent; color:var(--gold); border:1px dashed var(--gold); padding:8px; border-radius:10px; cursor:pointer; margin-bottom:15px; font-size:11px;" onclick="addRow()">+ Add Subject</button>
+        <div class="selector-track">
+            <div id="cgpaModeGlider" class="rolling-glider"></div>
+            <button id="btn-single-sem" class="active" onclick="switchCGPAMode('single')">Semester</button>
+            <button id="btn-overall-sem" onclick="switchCGPAMode('overall')">Overall</button>
         </div>
-        <button class="calc-btn" onclick="calculateCGPA()">Calculate CGPA</button>
+
+        <div id="single-sem-view">
+            <div class="input-group">
+                <label>ENTER SUBJECT DETAILS</label>
+                <div id="course-rows">
+                    <div class="course-row">
+                        <input type="number" step="0.01" class="c-credit" placeholder="Credit">
+                        <input type="number" step="0.01" class="c-gp" placeholder="GP (0.0-4.0)">
+                    </div>
+                </div>
+                <button class="add-btn" onclick="addRow()">+ Add Subject</button>
+            </div>
+            <button class="calc-btn" onclick="calculateCGPA()">Calculate Semester GPA</button>
+        </div>
+
+        <div id="overall-sem-view" style="display: none;">
+            <div class="input-group">
+                <label>ENTER SEMESTER DETAILS</label>
+                <div id="sem-rows">
+                    <div class="sem-row">
+                        <input type="text" class="s-name" placeholder="Sem (e.g. L1T1)">
+                        <input type="number" step="0.01" class="s-credit" placeholder="Total Cr">
+                        <input type="number" step="0.01" class="s-gpa" placeholder="GPA">
+                    </div>
+                </div>
+                <button class="add-btn" onclick="addSemRow()">+ Add Semester</button>
+            </div>
+            <button class="calc-btn" onclick="calculateOverallCGPA()">Calculate Overall CGPA</button>
+        </div>
     </div>
 
     <button class="reset-btn" onclick="resetForm()">Reset All</button>
@@ -288,6 +332,7 @@
 
 <script>
     let selectedCredit = 3;
+    let cgpaMode = 'single';
 
     function toggleTheme() {
         const body = document.body;
@@ -301,137 +346,4 @@
         const isMark = (tab === 'mark');
         document.getElementById('mark-section').style.display = isMark ? 'block' : 'none';
         document.getElementById('cgpa-section').style.display = isMark ? 'none' : 'block';
-        glider.style.transform = isMark ? 'translateX(0)' : 'translateX(100%)';
-        document.getElementById('tab-mark').classList.toggle('active', isMark);
-        document.getElementById('tab-cgpa').classList.toggle('active', !isMark);
-        document.getElementById('resultBox').style.display = "none";
-    }
-
-    function setCredit(val) {
-        selectedCredit = val;
-        const glider = document.getElementById('creditGlider');
-        const ct4 = document.getElementById('ct4');
-        const ctGrid = document.getElementById('ctGrid');
-
-        document.getElementById('btn2').classList.toggle('active', val === 2);
-        document.getElementById('btn3').classList.toggle('active', val === 3);
-        document.getElementById('btn4').classList.toggle('active', val === 4);
-
-        if (val === 2) {
-            glider.style.transform = 'translateX(0%)';
-        } else if (val === 3) {
-            glider.style.transform = 'translateX(100%)';
-        } else if (val === 4) {
-            glider.style.transform = 'translateX(200%)';
-        }
-
-        if (val === 4) {
-            ct4.style.display = 'block';
-            ctGrid.classList.add('four-cols');
-        } else {
-            ct4.style.display = 'none';
-            ct4.value = '';
-            ctGrid.classList.remove('four-cols');
-        }
-
-        let maxMid = 30;
-        let maxOther = 15;
-        if (val === 2) {
-            maxMid = 20;
-            maxOther = 10;
-        } else if (val === 4) {
-            maxMid = 40;
-            maxOther = 20;
-        }
-
-        document.getElementById('midLabel').innerText = `MID TERM (Max ${maxMid})`;
-        document.getElementById('attLabel').innerText = `ATTENDANCE (Max ${maxOther})`;
-        document.getElementById('perfLabel').innerText = `CLASS PERF. (Max ${maxOther})`;
-    }
-
-    function calculateMark() {
-        const cts = [
-            parseFloat(document.getElementById('ct1').value),
-            parseFloat(document.getElementById('ct2').value),
-            parseFloat(document.getElementById('ct3').value),
-            parseFloat(document.getElementById('ct4').value)
-        ];
-
-        for (let i = 0; i < (selectedCredit === 4 ? 4 : 3); i++) {
-            if (cts[i] < 0 || cts[i] > 20) return showResult("Error: Invalid CT marks!", true);
-        }
-
-        let ctArray = cts.slice(0, selectedCredit === 4 ? 4 : 3).filter(n => !isNaN(n)).sort((a,b) => b-a);
-        const requiredCount = selectedCredit === 4 ? 3 : 2;
-
-        if (ctArray.length < requiredCount) {
-            return alert(`Enter at least ${requiredCount} CT marks.`);
-        }
-
-        const mid = parseFloat(document.getElementById('midterm').value) || 0;
-        const att = parseFloat(document.getElementById('attendance').value) || 0;
-        const perf = parseFloat(document.getElementById('performance').value) || 0;
-        const target = parseFloat(document.getElementById('targetGPA').value);
-
-        let maxM = 30;
-        let maxO = 15;
-        let maxF = 180;
-
-        if (selectedCredit === 2) {
-            maxM = 20; maxO = 10; maxF = 120;
-        } else if (selectedCredit === 4) {
-            maxM = 40; maxO = 20; maxF = 240;
-        }
-
-        if (mid < 0 || mid > maxM || att < 0 || att > maxO || perf < 0 || perf > maxO) {
-            return showResult(`Error: Input exceeds limits!`, true);
-        }
-
-        let ctAvg = selectedCredit === 4 
-            ? (ctArray[0] + ctArray[1] + ctArray[2]) / 3 
-            : (ctArray[0] + ctArray[1]) / 2;
-
-        let cur = (ctAvg) + (mid / maxM * 10) + (att / maxO * 5) + (perf / maxO * 5);
-        let final = ((target - cur) / 60) * maxF;
-
-        showResult(final > maxF ? "Target Unreachable!" : `NEED: ${Math.max(0, final).toFixed(2)} / ${maxF}`, final > maxF);
-    }
-
-    function calculateCGPA() {
-        const credits = document.getElementsByClassName('c-credit');
-        const gps = document.getElementsByClassName('c-gp');
-        let totalP = 0, totalC = 0;
-        for (let i = 0; i < credits.length; i++) {
-            let c = parseFloat(credits[i].value), g = parseFloat(gps[i].value);
-            if (!isNaN(c) && !isNaN(g)) {
-                if (![0.75, 1.5, 2.0, 3.0, 4.0].includes(c)) return showResult(`Error: Invalid Credit.`, true);
-                if (g < 0 || g > 4.0) return showResult(`Error: Max GPA is 4.0.`, true);
-                totalP += (c * g); totalC += c;
-            }
-        }
-        if (totalC === 0) return alert("Enter values!");
-        showResult(`ESTIMATED GPA: ${(totalP / totalC).toFixed(2)}`);
-    }
-
-    function addRow() {
-        const div = document.createElement('div');
-        div.className = 'course-row';
-        div.innerHTML = `<input type="number" step="0.01" class="c-credit" placeholder="Credit"><input type="number" step="0.01" class="c-gp" placeholder="GP">`;
-        document.getElementById('course-rows').appendChild(div);
-    }
-
-    function showResult(msg, err=false) {
-        document.getElementById('resultBox').style.display = "block";
-        const d = document.getElementById('displayResult');
-        d.innerHTML = msg; d.style.color = err ? "#ff4d4d" : "var(--gold)";
-    }
-
-    function resetForm() {
-        document.querySelectorAll('input').forEach(i => i.value = '');
-        document.getElementById('course-rows').innerHTML = `<div class="course-row"><input type="number" step="0.01" class="c-credit" placeholder="Credit"><input type="number" step="0.01" class="c-gp" placeholder="GP"></div>`;
-        document.getElementById('resultBox').style.display = "none";
-        setCredit(3); switchTab('mark');
-    }
-</script>
-</body>
-</html>
+        glider.style.transform
